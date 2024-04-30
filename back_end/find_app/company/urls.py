@@ -3,7 +3,10 @@ from . import views
 
 urlpatterns = [
         path('api/',views.company_register.as_view() ,name='company_register' ),
-        path('company/login/',views.CompanyLoginView.as_view(), name='company-login')
+        path('company/login/',views.CompanyLoginView.as_view(), name='company-login'),
+        path('company/open_job',views.Jobopen.as_view(), name= 'job_open'),
+        path('company/view_job',views.Jobview.as_view(), name= 'jobview')
+
 
     ]
     

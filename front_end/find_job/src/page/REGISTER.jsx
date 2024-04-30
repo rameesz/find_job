@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 function REGISTER() {
@@ -66,6 +66,8 @@ function REGISTER() {
         />
       </div>
       <button type="submit" className="btn btn-primary">Register</button>
+      <hr />
+      <Link to={'/login'}>I Have Already Account</Link>
     </form>
     {message && <p>{message}</p>}
   </div>
