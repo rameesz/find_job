@@ -35,6 +35,10 @@ const Login = () => {
 
       // Check if the request was successful
       if (response.status === 200) {
+        console.log(response);
+        if(response.session_id){
+          localStorage.setItem('session_id',session_id)
+        }
         // Handle successful login (e.g., redirect the user)
         window.location.href = '/dashboard'; // Redirect to the dashboard page
       } else {

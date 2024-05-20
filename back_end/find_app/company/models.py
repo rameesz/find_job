@@ -8,6 +8,7 @@ class Company_register(models.Model):
     
 class JobOpening(models.Model):
     title = models.CharField(max_length=100)
+    company = models.ForeignKey(Company_register, on_delete = models.CASCADE)
     description = models.TextField()
     requirement = models.TextField()
     education_qualification = models.CharField(max_length=100)
@@ -16,3 +17,7 @@ class JobOpening(models.Model):
 
     def __str__(self):
         return self.title
+    
+    
+# class JobApplication(models.Model):
+#     job_id = models.ForeignKey(Company_register, on_delete = models.CASCADE)
