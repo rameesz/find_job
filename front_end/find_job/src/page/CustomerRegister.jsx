@@ -25,7 +25,7 @@ function CustomerRegister() {
   
       if (response.status === 200) {
         setMessage('Registration successful!');
-        navigate('/login')
+        navigate('/customer/login')
       } else {
         setMessage('Registration failed.');
       }
@@ -67,7 +67,7 @@ function CustomerRegister() {
       </div>
       <button type="submit" className="btn btn-primary">Register</button>
       <hr />
-      <Link to={'/customer_login'}>I Have Already Account</Link>
+      <Link to={'/customer/login'}>I Have Already Account</Link>
     </form>
     {message && <p>{message}</p>}
   </div>

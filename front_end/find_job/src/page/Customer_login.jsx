@@ -32,15 +32,18 @@ const CustomerLogin = () => {
           'Content-Type': 'application/json'
         }
       });
+      console.log(response,"sefjkerhfber");
 
       // Check if the request was successful
+      console.log(response);
       if (response.status === 200) {
-        console.log(response);
-        if(response.session_id){
-          localStorage.setItem('session_id',session_id)
+        
+        if(response.data.session_id){
+          localStorage.setItem('session_id',response.data.session_id)
+          localStorage.setItem('customer_id',response.data.customer_id)
+          window.location.href = '/'; // Redirect to the dashboard page
         }
         // Handle successful login (e.g., redirect the user)
-        window.location.href = '/applyjob'; // Redirect to the dashboard page
       } else {
         // Handle errors (e.g., display error message to the user)
         console.error('Login failed:', response.data.error);

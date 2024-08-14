@@ -2,9 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Card, Button, Modal, Form } from 'react-bootstrap';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const Jobcard = ({ job , fetch}) => {
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate()
+  const viewApplicants = (jobId) => {
+    navigate(`/company/appliedcustomer/${jobId}`);
+    };
   const [formData, setFormData] = useState({
     title: job?.title || '',
     location: job?.location || '',
@@ -32,7 +38,7 @@ const Jobcard = ({ job , fetch}) => {
 
   const handleDeleteClick = async () => {
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/company/open_job/?id=${job.id}`);
+      const response = await axios.delete(`http://127.0.0.1:8000/company/openjob/?id=${job.id}`);
       console.log('Job deleted successfully:', response.data);
       fetch();
       // Implement logic to update UI after deletion
@@ -52,7 +58,7 @@ const Jobcard = ({ job , fetch}) => {
 
   const handleSaveChanges = async () => {
     try {
-      const response = await axios.patch(`http://127.0.0.1:8000/company/open_job/?id=${job.id}`, formData);
+      const response = await axios.patch(`http://127.0.0.1:8000/company/openjob/?id=${job.id}`, formData);
       console.log('Changes saved:', response.data);
       setShowModal(false);
       fetch();
@@ -72,6 +78,7 @@ const Jobcard = ({ job , fetch}) => {
             <Card.Subtitle className="mb-2 text-muted">{job.location}</Card.Subtitle>
             <Card.Text>{job.description}</Card.Text>
             <div className="d-flex justify-content-end">
+              <Button variant="primary" className="mr-2" onClick={() =>viewApplicants(job.id)}>View applicants</Button>
               <Button variant="primary" className="mr-2" onClick={handleEditClick}>Edit</Button>
               <Button variant="danger" onClick={handleDeleteClick}>Delete</Button>
             </div>
@@ -110,4 +117,4 @@ const Jobcard = ({ job , fetch}) => {
   );
 };
 
-export default Jobcard;
+export default Jobcard;

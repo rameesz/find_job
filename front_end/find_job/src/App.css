@@ -1,0 +1,33 @@
+/* styles.css */
+.custom-navbar {
+    background-color: #f8f9fa;
+    padding: 1rem 2rem;
+  }
+  
+  .custom-navbar-brand {
+    font-weight: bold;
+    color: #343a40;
+  }
+  
+  .custom-nav-link {
+    color: #007bff;
+    font-weight: 500;
+  }
+  
+  .custom-nav-link:hover {
+    color: #0056b3;
+  }
+  
+  .custom-search {
+    border-radius: 0.25rem;
+  }
+  
+  .custom-button {
+    border-radius: 0.25rem;
+    margin-left: 0.5rem;
+  }
+  
+  .custom-button:hover {
+    opacity: 0.9;
+  }
+  

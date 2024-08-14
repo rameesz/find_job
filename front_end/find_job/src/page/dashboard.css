@@ -1,0 +1,38 @@
+/* styles.css */
+.custom-card {
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-card .card-header {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .custom-card .card-body {
+    padding: 1.5rem;
+  }
+  
+  .custom-card .list-group-item {
+    padding: 1.25rem 1.5rem;
+  }
+  
+  .custom-card .list-group-item h5 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .custom-card .list-group-item p {
+    margin-bottom: 0.5rem;
+  }
+  
+  .custom-card .btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+  }
+  
+  .custom-card .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+  

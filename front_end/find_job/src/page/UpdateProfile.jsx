@@ -16,7 +16,7 @@ const UpdateProfile = () => {
   const [phone, setPhone] = useState('');
   const [qualification, setQualification] = useState('');
   const [experience, setExperience] = useState('');
-  const [cv, setCv] = useState(null);
+  const [resume, setResume] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ const UpdateProfile = () => {
       formData.append('phone', phone);
       formData.append('qualification', qualification);
       formData.append('experience', experience);
-      formData.append('resume', cv);
+      formData.append('resume', resume);
 
       const response = await axios.post('http://127.0.0.1:8000/customer/update_profile/', formData);
       
@@ -117,7 +117,7 @@ const UpdateProfile = () => {
                 id="upload-cv"
                 type="file"
                 accept=".pdf,.doc,.docx"
-                onChange={(e) => setCv(e.target.files[0])}
+                onChange={(e) => setResume(e.target.files[0])}
               />
             </Grid>
           </Grid>

@@ -43,12 +43,13 @@ const Openjob = ({fetch}) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/company/open_job/', {
+      var cmp = localStorage.getItem('company_id')
+      const response = await axios.post('http://127.0.0.1:8000/company/openjob/', {
         title: title,
         description: description,
         requirement: requirement,
         education_qualification: education_qualification,
-        company :1,
+        company :cmp,
         location: location 
       });
   

@@ -9,6 +9,6 @@ class Customer_register(models.Model):
     phone =models.CharField(max_length=100,null=True)
     qualification = models.CharField(max_length=100,null=True)
     experience = models.CharField(max_length=100,null=True)
-    resume = models.ImageField( upload_to='./resume/',null=True)
+    resume =  models.FileField(upload_to='cv_uploads/%Y/%m/%d/',null=True)
     
     
