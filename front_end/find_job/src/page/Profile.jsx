@@ -96,25 +96,25 @@ const MyProfile = () => {
   return (
     <>
       <Navbar />
-      <Card className="mx-auto my-5 p-4 shadow-sm" style={{ maxWidth: '600px' }}>
+      <Card className="mx-auto my-5 p-4 shadow-lg rounded-lg" style={{ maxWidth: '600px', backgroundColor: '#f8f9fa' }}>
         <Card.Body>
-          <Card.Title className="mb-4">My Profile</Card.Title>
+          <Card.Title className="mb-4 text-center font-weight-bold text-primary" style={{ fontSize: '1.5rem' }}>My Profile</Card.Title>
           <Card.Text><strong>Email:</strong> {initialData.email}</Card.Text>
           <Card.Text><strong>First Name:</strong> {initialData.fname}</Card.Text>
           <Card.Text><strong>Last Name:</strong> {initialData.lname}</Card.Text>
           <Card.Text><strong>Phone:</strong> {initialData.phone}</Card.Text>
           <Card.Text><strong>Qualification:</strong> {initialData.qualification}</Card.Text>
           <Card.Text><strong>Experience:</strong> {initialData.experience}</Card.Text>
-          <Card.Title>CV: <a href={`${initialData.resume_url}`}>CLICK HERE</a></Card.Title>
+          <Card.Title>CV: <a href={`${initialData.resume_url}`} target="_blank" rel="noopener noreferrer">CLICK HERE</a></Card.Title>
           <div className="d-flex justify-content-end">
-            <Button variant="primary" onClick={handleEditClick}>
+            <Button variant="primary" className="rounded-pill px-4 py-2" onClick={handleEditClick}>
               Update Profile
             </Button>
           </div>
         </Card.Body>
       </Card>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
@@ -151,10 +151,10 @@ const MyProfile = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant="secondary" onClick={() => setShowModal(false)} className="rounded-pill">
             Close
           </Button>
-          <Button variant="primary" onClick={handleSaveChanges}>
+          <Button variant="primary" onClick={handleSaveChanges} className="rounded-pill">
             Save Changes
           </Button>
         </Modal.Footer>

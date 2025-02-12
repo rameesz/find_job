@@ -41,7 +41,7 @@ function CustomerRegister() {
   <div style={{ border: '1px solid #ced4da', borderRadius: '5px', padding: '20px',width:"400px",margin:"200px auto"}}>
 
     <div className="container">
-    <h2>Register</h2>
+    <h2>USER REGISTER</h2>
     <form onSubmit={handleSubmit}>
       <div className="mb-3">
         <label htmlFor="email" className="form-label">Email:</label>
@@ -68,6 +68,9 @@ function CustomerRegister() {
       <button type="submit" className="btn btn-primary">Register</button>
       <hr />
       <Link to={'/customer/login'}>I Have Already Account</Link>
+      <br /><br />
+            <Link to={'/register'}>Company Login</Link> 
+      
     </form>
     {message && <p>{message}</p>}
   </div>

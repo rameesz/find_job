@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState(''); // success or error
+  const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -26,57 +28,79 @@ const Login = () => {
     };
 
     try {
-      // Make an HTTP POST request to the server
       const response = await axios.post('http://127.0.0.1:8000/company/login/', formData, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      console.log("***********",response);
+
       // Check if the request was successful
       if (response.status === 200) {
-        console.log(response)
-        if(response.data.session_id){
-          console.log(response)
-
-          localStorage.setItem('session_cmp_id',response.data.session_id)
-          localStorage.setItem('company_id',response.data.company_id)
-          window.location.href = '/dashboard';
-
-
+        if (response.data.session_id) {
+          localStorage.setItem('session_cmp_id', response.data.session_id);
+          localStorage.setItem('company_id', response.data.company_id);
+          setMessage('Login successful!');
+          setMessageType('success');
+          navigate('/dashboard'); // Redirect to the dashboard after success
         }
-        // Handle successful login (e.g., redirect the user)
-  
       } else {
-        // Handle errors (e.g., display error message to the user)
-        console.error('Login failed:', response.data.error);
-        // Display error message to the user
+        setMessage('Login failed. Please check your credentials.');
+        setMessageType('danger');
       }
     } catch (error) {
-      // Handle network errors or other exceptions
       console.error('An error occurred while logging in:', error.message);
-      // Display error message to the user
+      setMessage('An error occurred. Please try again.');
+      setMessageType('danger');
     }
   };
 
   return (
-    <div style={{ border: '1px solid #ced4da', borderRadius: '5px', padding: '20px', width: "400px", margin: "200px auto" }}>
-      <h2 className="mt-5">Company Login</h2>
-      <Form className="mt-4" onSubmit={handleSubmit}>
-        <Form.Group controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="email" placeholder="Enter email" value={email} onChange={handleEmailChange} />
-        </Form.Group>
-        <Form.Group controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-        <hr />
-        <Link to='/register'>Create Account</Link> 
-      </Form>
+    <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+      <div className="card shadow-sm" style={{ width: '100%', maxWidth: '400px' }}>
+        <div className="card-body">
+          <h2 className="text-center mb-4">Company Login</h2>
+
+          {message && (
+            <Alert variant={messageType} className="mb-3">
+              {message}
+            </Alert>
+          )}
+
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formBasicEmail" className="mb-3">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={handleEmailChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword" className="mb-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={handlePasswordChange}
+                required
+              />
+            </Form.Group>
+
+            <Button variant="primary" type="submit" className="w-100 mb-3">
+              Submit
+            </Button>
+
+            <div className="text-center">
+              <hr />
+              <Link to="/register" className="d-block mb-2">Create Account</Link>
+              <Link to="/customer/login" className="d-block">User Login</Link>
+            </div>
+          </Form>
+        </div>
+      </div>
     </div>
   );
 };

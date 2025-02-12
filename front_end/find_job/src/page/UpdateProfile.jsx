@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
-import { Button, TextField, Typography, Grid, Container, makeStyles } from '@material-ui/core';
+import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    marginTop: theme.spacing(4),
-  },
-}));
-
 const UpdateProfile = () => {
-  const classes = useStyles();
-
   const [fname, setFristName] = useState('');
   const [lname, setLastName] = useState('');
   const [phone, setPhone] = useState('');
@@ -35,102 +27,100 @@ const UpdateProfile = () => {
       console.log('Response:', response);
       if (response.status === 200) {
         alert('Application submitted successfully!');
-        
       } else {
         alert('Error submitting application. Please try again later.');
       }
-     
-      // You can add additional logic after successful submission
     } catch (error) {
       console.error('Error submitting application:', error);
     }
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.root} style={{marginTop:"50px"}}>
-        <Typography component="h1" variant="h5" style={{textAlign:'center'}}>
-          UPDATE PROFILE
-        </Typography>
-        <br />
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <TextField
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="First Name"
-                    value={fname}
-                    onChange={(e) => setFristName(e.target.value)} // Corrected typo here
-                />
-            </Grid>
-
-            
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
+    <Container className="my-5" style={{maxWidth: '600px'}}>
+      <div className="shadow p-4 rounded">
+        <h3 className="text-center mb-4">Update Profile</h3>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group as={Row} controlId="formFirstName">
+            <Form.Label column sm={4}>First Name</Form.Label>
+            <Col sm={8}>
+              <Form.Control
+                type="text"
+                placeholder="Enter your first name"
+                value={fname}
+                onChange={(e) => setFristName(e.target.value)}
                 required
-                fullWidth
-                label="Last Name"
+              />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row} controlId="formLastName">
+            <Form.Label column sm={4}>Last Name</Form.Label>
+            <Col sm={8}>
+              <Form.Control
+                type="text"
+                placeholder="Enter your last name"
                 value={lname}
                 onChange={(e) => setLastName(e.target.value)}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
                 required
-                fullWidth
-                label="Phone"
+              />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row} controlId="formPhone">
+            <Form.Label column sm={4}>Phone</Form.Label>
+            <Col sm={8}>
+              <Form.Control
+                type="text"
+                placeholder="Enter your phone number"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
                 required
-                fullWidth
-                label="Qualification"
+              />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row} controlId="formQualification">
+            <Form.Label column sm={4}>Qualification</Form.Label>
+            <Col sm={8}>
+              <Form.Control
+                type="text"
+                placeholder="Enter your qualification"
                 value={qualification}
                 onChange={(e) => setQualification(e.target.value)}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
                 required
-                fullWidth
-                label="Experience"
+              />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row} controlId="formExperience">
+            <Form.Label column sm={4}>Experience</Form.Label>
+            <Col sm={8}>
+              <Form.Control
+                type="number"
+                placeholder="Enter years of experience"
                 value={experience}
                 onChange={(e) => setExperience(e.target.value)}
+                required
               />
-            </Grid>
+            </Col>
+          </Form.Group>
 
-            <Grid item xs={12}>
-              <label htmlFor="upload-cv">Upload CV</label>
+          <Form.Group as={Row} controlId="formCv">
+            <Form.Label column sm={4}>Upload CV</Form.Label>
+            <Col sm={8}>
               <input
-                id="upload-cv"
                 type="file"
                 accept=".pdf,.doc,.docx"
                 onChange={(e) => setResume(e.target.files[0])}
+                className="form-control"
               />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            style={{marginTop:'20px'}}
-          >
+            </Col>
+          </Form.Group>
+
+          <Button type="submit" variant="primary" size="lg" block className="mt-4">
             Submit
           </Button>
-        </form>
+        </Form>
       </div>
     </Container>
   );

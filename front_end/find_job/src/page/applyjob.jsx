@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Typography } from "@mui/material";
-import { Button } from 'react-bootstrap';
+import { Card, CardContent, Typography, Grid, Alert } from "@mui/material";
+import { Button, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from './Navbar';
-import Alert from '@mui/material/Alert';
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const Applyjob = () => {
@@ -16,36 +15,21 @@ const Applyjob = () => {
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get('search') || '';
 
-
-
-
-  const handleApply = async (jobId, company, cand) => {
+  const handleApply = async (jobId, company) => {
     const customerId = localStorage.getItem('customer_id');
-    const isLoggedIn = !!customerId;
-  
-    if (!isLoggedIn) {
-      navigate('/customer/login')
+    if (!customerId) {
+      navigate('/customer/login');
+      return;
     }
-    try {
-      var cand = localStorage.getItem('customer_id');
-      console.log(jobId);
-      console.log(company);
-      console.log(cand);
 
-      const rdata = { job_id: jobId, company_id: company, customer_id: cand };
-      console.log(rdata);
+    try {
+      const rdata = { job_id: jobId, company_id: company, customer_id: customerId };
       const response = await axios.post('http://127.0.0.1:8000/company/jobapplication/', rdata);
 
       if (response.status === 201) {
-        console.log('Application submitted:', response);
         setIsAlert(true);
-
-        setTimeout(() => {
-          setIsAlert(false);
-          navigate(`/company/appliedcustomer/${jobId}`);
-        }, 3000);
+        setTimeout(() => setIsAlert(false), 3000);
       } else if (response.status === 200) {
-        console.log(response);
         alert(response.data.error);
       }
     } catch (error) {
@@ -54,63 +38,77 @@ const Applyjob = () => {
   };
 
   useEffect(() => {
-    const fetch = () => {
-      console.log("fetching..")
-      axios.get('http://127.0.0.1:8000/company/openjob/')
-        .then(response => {
-          const data = response.data.map(item => ({
-            id: item.id,
-            company: item.company,
-            title: item.title,
-            description: item.description,
-            location: item.location,
-            education_qualification: item.education_qualification,
-            requirement: item.requirement
-          }));
-          console.log(data);
-          setData(data);
-        })
-        .catch(error => console.error('Error fetching initial data:', error));
-    };
-    fetch();
+    axios.get('http://127.0.0.1:8000/company/openjob/')
+      .then(response => {
+        const data = response.data.map(item => ({
+          id: item.id,
+          company: item.company,
+          title: item.title,
+          description: item.description,
+          location: item.location,
+          education_qualification: item.education_qualification,
+          requirement: item.requirement
+        }));
+        setData(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
   }, []);
+
   const filteredData = Data.filter(job => job.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <>
-      <Navbar/>
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-      <div>
-      {isAlert && (
-          <Alert severity="success">
-            Here is a gentle confirmation that you have successfully applied for this job.
+      <Navbar />
+      <Container className="mt-4 d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+        {isAlert && (
+          <Alert severity="success" className="mb-3 text-center">
+            ✅ You have successfully applied for this job.
           </Alert>
         )}
-      {filteredData.map((job, index) => (
-        <Card key={index}  style={{ width: '58rem', marginBottom: '20px' }}>
-          <CardContent>
-            <Typography variant="h5" component="h2">
-              {job.title}
-            </Typography>
-            <Typography color="textSecondary">
-              Company: {job.company}
-            </Typography>
-            <Typography color="textSecondary">
-              Location: {job.location}
-            </Typography>
-            <Typography variant="body2" component="p">
-              Description: {job.description}
-            </Typography>
-            <Typography variant="body2" component="p">
-              Requirements: {job.requirement}
-            </Typography>
-            {/* You can add more details here */}
-            <Button variant="primary" className="mr-2" onClick={()=> handleApply(job.id, job.company)}>Apply</Button>
-          </CardContent>
-        </Card>
-      ))}
-      </div>
-    </div>
+
+        <Grid container spacing={3} justifyContent="center">
+          {filteredData.map((job) => (
+            <Grid item xs={12} sm={10} md={8} key={job.id}>
+              <Card sx={{ boxShadow: 5, borderRadius: 8 }} className="p-3 bg-light">
+                <CardContent>
+                  <Typography variant="h5" className="fw-bold text-primary">
+                    {job.title}
+                  </Typography>
+                  <Typography color="textSecondary" gutterBottom className="text-muted">
+                    🏢 <strong>Company:</strong> {job.company}
+                  </Typography>
+                  <Typography color="textSecondary" className="text-muted">
+                    📍 <strong>Location:</strong> {job.location}
+                  </Typography>
+                  <Typography variant="body1" className="mt-3 mb-2">
+                    <strong>Description:</strong> {job.description}
+                  </Typography>
+                  <Typography variant="body1" className="mt-2 mb-3">
+                    <strong>Requirements:</strong> {job.requirement}
+                  </Typography>
+
+                  {/* Apply Button */}
+                  <Button
+                    variant="primary"
+                    className="w-100 rounded-pill py-2 text-white"
+                    onClick={() => handleApply(job.id, job.company)}
+                    style={{
+                      backgroundColor: "#007bff",
+                      border: "none",
+                      fontWeight: "bold",
+                      transition: "0.3s ease",
+                    }}
+                    onMouseOver={(e) => e.target.style.backgroundColor = "#0056b3"}
+                    onMouseOut={(e) => e.target.style.backgroundColor = "#007bff"}
+                  >
+                    Apply Now
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
     </>
   );
 };

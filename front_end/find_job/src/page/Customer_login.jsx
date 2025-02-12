@@ -58,7 +58,7 @@ const CustomerLogin = () => {
 
   return (
     <div style={{ border: '1px solid #ced4da', borderRadius: '5px', padding: '20px', width: "400px", margin: "200px auto" }}>
-      <h2 className="mt-5">CANIDATE LOGIN</h2>
+      <h2 className="mt-5">USER LOGIN</h2>
       <Form className="mt-4" onSubmit={handleSubmit}>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
@@ -72,7 +72,10 @@ const CustomerLogin = () => {
           Submit
         </Button>
         <hr />
-        <Link to='/customer_register'>Create Account</Link> 
+        <Link to='/customer/register'>Create Account</Link> 
+        <br /><br />
+        <Link to={'/register'}>Company Login</Link> 
+
       </Form>
     </div>
   );

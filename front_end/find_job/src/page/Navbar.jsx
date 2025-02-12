@@ -1,112 +1,136 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Navbar, Container, Nav, Form, Button } from 'react-bootstrap';
-import axios from 'axios';
-import '../App.css';  // Import custom CSS file
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Navbar, Container, Nav, Form, Button } from "react-bootstrap";
+import axios from "axios";
+import "../App.css"; // Import custom CSS file
 
 function NavigationBar() {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
-  const isLoggedIn = localStorage.getItem('customer_id'); // Check if user is logged in
-  const isCompanyLoggedIn = localStorage.getItem('company_id'); // Check if user is logged in
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const customerLogin = () => {
-    navigate('/customer/login');
-  };
-
-  const companyLogin = () => {
-    navigate('/login');
-  };
-
-  const data = {
-    sessionKey: localStorage.getItem('session_id')
-  };
-
-  const companyData = {
-    sessionKey: localStorage.getItem('session_cmp_id')
-  };
+  const isLoggedIn = !!localStorage.getItem("customer_id"); // Check if customer is logged in
+  const isCompanyLoggedIn = !!localStorage.getItem("company_id"); // Check if company is logged in
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/customer/logout/', data, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      await axios.post("http://127.0.0.1:8000/customer/logout/", {
+        sessionKey: localStorage.getItem("session_id"),
       });
 
-      if (response.status === 200) {
-        localStorage.removeItem('session_id');
-        localStorage.removeItem('customer_id');
-        navigate('/customer/login');
-      } else {
-        console.error('Logout failed:', response.data.error);
-        alert('Logout failed. Please try again.');
-      }
+      localStorage.removeItem("session_id");
+      localStorage.removeItem("customer_id");
+      navigate("/customer/login");
     } catch (error) {
-      console.error('An error occurred while logging out:', error.message);
-      alert('An error occurred while logging out. Please try again.');
+      console.error("Logout Error:", error.message);
+      alert("Error logging out. Please try again.");
     }
   };
 
   const handleCompanyLogout = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/company/logout/', companyData, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
+      await axios.post("http://127.0.0.1:8000/company/logout/", {
+        sessionKey: localStorage.getItem("session_cmp_id"),
       });
 
-      if (response.status === 200) {
-        localStorage.removeItem('session_cmp_id');
-        localStorage.removeItem('company_id');
-        console.log('Logout successful');
-        navigate('/login');
-      } else {
-        console.log('Logout failed');
-      }
+      localStorage.removeItem("session_cmp_id");
+      localStorage.removeItem("company_id");
+      navigate("/login");
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Company Logout Error:", error);
     }
   };
 
   const handleSearch = () => {
-    navigate(`/?search=${searchQuery}`);
+    if (searchQuery.trim() !== "") {
+      navigate(`/?search=${searchQuery}`);
+    }
   };
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary custom-navbar">
-      <Container fluid>
-        <Navbar.Brand href='/' className="custom-navbar-brand">
-          Find Your Dream Jobs Here
-        </Navbar.Brand>
+    <Navbar expand="lg" className="navbar-dark py-3 shadow-lg" style={{ background: "linear-gradient(to right, #4e73df, #1cc88a)" }}>
+      <Container>
+        {/* Show brand only when neither customer nor company is logged in */}
+        {isLoggedIn && !isCompanyLoggedIn && (
+          <Navbar.Brand as={Link} to="/" className="fw-bold text-white fs-2">
+            Find Your Dream Jobs
+          </Navbar.Brand>
+        )}
+
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
-          <Nav className="me-auto my-2 my-lg-0" navbarScroll>
-            {isCompanyLoggedIn && <Nav.Link href='/dashboard' className="custom-nav-link">Company Dashboard</Nav.Link>}
+          <Nav className="me-auto">
+            {isCompanyLoggedIn && !isLoggedIn && ( // Show only if a company is logged in
+              <Nav.Item>
+                <Link to="/dashboard" className="nav-link text-white fw-semibold fs-5">
+                  Company Dashboard
+                </Link>
+              </Nav.Item>
+            )}
           </Nav>
-          <Form className="d-flex">
+
+          {/* Search Bar */}
+          <Form className="d-flex flex-wrap gap-2 align-items-center">
             <Form.Control
               type="search"
-              placeholder="Search"
-              className="me-2 custom-search"
-              aria-label="Search"
+              placeholder="Search jobs..."
+              className="me-2 border-light rounded-pill px-3"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ backgroundColor: "#f8f9fc", color: "#495057" }}
             />
-            <Button variant="outline-success" className="me-2 custom-button" onClick={handleSearch}>Search</Button>
+            <Button
+              variant="outline-light"
+              onClick={handleSearch}
+              className="rounded-pill px-4"
+              style={{ transition: "background-color 0.3s ease" }}
+            >
+              Search
+            </Button>
+
+            {/* Conditional Login/Logout Buttons */}
             {isLoggedIn ? (
-              <Button variant="outline-danger" className="me-2 custom-button" onClick={handleLogout}>Candidate Logout</Button>
+              <>
+                <Button
+                  variant="outline-warning"
+                  onClick={() => navigate("/profile")}
+                  className="rounded-pill px-4"
+                >
+                  Profile
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  onClick={handleLogout}
+                  className="rounded-pill px-4 ms-2"
+                >
+                  Logout
+                </Button>
+              </>
+            ) : isCompanyLoggedIn ? (
+              <Button
+                variant="outline-danger"
+                onClick={handleCompanyLogout}
+                className="rounded-pill px-4 ms-2"
+              >
+                Company Logout
+              </Button>
             ) : (
-              isCompanyLoggedIn ? (
-                <Button variant="outline-success" className="me-2 custom-button" onClick={handleCompanyLogout}>Company Logout</Button>
-              ) : (
-                <>
-                  <Button variant="outline-danger" className="me-2 custom-button" onClick={companyLogin}>Company Login</Button>
-                  <Button variant="outline-danger" className="me-2 custom-button" onClick={customerLogin}>Candidate Login</Button>
-                </>
-              )
+              <>
+                <Button
+                  variant="outline-light"
+                  onClick={() => navigate("/login")}
+                  className="rounded-pill px-4 ms-2"
+                >
+                  Company Login
+                </Button>
+                <Button
+                  variant="outline-warning"
+                  onClick={() => navigate("/customer/login")}
+                  className="rounded-pill px-4 ms-2"
+                >
+                  Candidate Login
+                </Button>
+              </>
             )}
-            {isLoggedIn && <Button variant="outline-primary" className="custom-button" onClick={() => navigate('/profile')}>Profile</Button>}
           </Form>
         </Navbar.Collapse>
       </Container>

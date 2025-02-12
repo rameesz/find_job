@@ -12,14 +12,23 @@ from rest_framework import status
 
 # Create your views here.
 class company_register(APIView):
-    def post(self,request):
+    def post(self, request):
+        email = request.data.get("email")  # Extract email from request data
+
+        # Check if a company with the same email already exists
+        if Company_register.objects.filter(email=email).exists():
+            return Response({"result": "Account already exists with this email"}, status=status.HTTP_400_BAD_REQUEST)
+
         serializer = Company_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()  
-            return Response({'result':'register success'})
         
-    
-        return Response ({'result':'register failed'})
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"result": "Register success"}, status=status.HTTP_201_CREATED)
+
+        # Log serializer errors for debugging
+        print("Serializer Errors: ", serializer.errors)  # For debugging, you can log it as well
+
+        return Response({"result": "Register failed", "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
     
 class CompanyLoginView(APIView):
