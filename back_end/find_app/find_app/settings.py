@@ -30,6 +30,9 @@ ALLOWED_HOSTS = ['*']
 
 CORS_ORIGIN_ALLOW_ALL = True  # Allow requests from any origin
 
+ALLOWED_HOSTS = ['FindJobo.pythonanywhere.com']
+
+
 # Application definition
 
 INSTALLED_APPS = [
